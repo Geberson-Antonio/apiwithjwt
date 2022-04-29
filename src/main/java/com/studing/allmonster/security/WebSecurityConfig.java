@@ -1,7 +1,9 @@
 package com.studing.allmonster.security;
 
+import com.studing.allmonster.repository.UserRepository;
 import com.studing.allmonster.security.jwt.AuthEntryPointJwt;
 import com.studing.allmonster.security.jwt.AuthTokenFilter;
+import com.studing.allmonster.security.services.TratamentoErro403;
 import com.studing.allmonster.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
@@ -58,7 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated().and().addFilterBefore(authenticationJwtTokenFilter(),UsernamePasswordAuthenticationFilter.class)
+                        .exceptionHandling().accessDeniedHandler(new TratamentoErro403());
 
        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

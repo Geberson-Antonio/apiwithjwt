@@ -128,11 +128,4 @@ public class AuthController {
                 userDetails.getName()
         ));
     }
-    @GetMapping("/admin")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public String adminAccess() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userDetails.getName();
-    }
-
 }
