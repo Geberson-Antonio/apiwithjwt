@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class TratamentoErro403 implements AccessDeniedHandler {
+public class TreatmentError403 implements AccessDeniedHandler {
     public void handle(HttpServletRequest req, HttpServletResponse res, AccessDeniedException ex)throws IOException, ServletException {
         res.setStatus(403);
         res.setContentType("application/json");
